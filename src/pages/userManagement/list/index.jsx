@@ -149,7 +149,11 @@ const ListUsers = () => {
       base64_password: btoa(userData.password),
       permissions: resolvedPermissions,
       permissions_template: resolvedPermissionsTemplate,
-      organization_id,
+      // Resolved by useBulkImport's wrappedCreateFunction (hooks/useImport.js):
+      // the CSV's "Organization ID" column when the row set one, otherwise
+      // the currently browsed org - never read organization_id off the raw
+      // parsed row directly, the wrapper is what applies that fallback.
+      organization_id: userData.organization_id,
       ui_info: {},
     };
 

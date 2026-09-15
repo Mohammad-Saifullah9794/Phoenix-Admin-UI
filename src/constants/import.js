@@ -1740,6 +1740,26 @@ export const IMPORT_FIELD_MAPPINGS = {
       },
     },
     {
+      key: "organization_id",
+      header: "Organization ID",
+      csvHeader: "Organization ID",
+      type: "string",
+      required: false,
+      width: 30,
+      sampleValue: "",
+      sampleValue2: "",
+      // Leave blank to create the user in the currently browsed
+      // organization (the existing/default behavior) - useBulkImport's
+      // wrappedCreateFunction (hooks/useImport.js) fills that in whenever
+      // this column is empty. A non-blank value routes that row's user to
+      // this specific org instead. Only a well-formed UUID is checked here -
+      // whether this admin is actually allowed to create users in that
+      // specific organization is enforced by the backend, and a row
+      // targeting an org they can't manage fails with whatever error the
+      // backend returns.
+      validate: validateOptionalUUID("Organization ID"),
+    },
+    {
       key: "permission_template",
       header: "Permission Template",
       csvHeader: "Permission Template",

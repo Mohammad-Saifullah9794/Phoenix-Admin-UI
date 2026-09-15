@@ -44,12 +44,18 @@ export const useBulkImport = (
     if (!organization_id || !createFunction) return null;
 
     try {
-      // Wrap the create function to include organization_id and additional params
+      // Wrap the create function to include organization_id and additional params.
+      // A module whose field mapping defines its own "organization_id"
+      // column (e.g. users' bulk import - see IMPORT_FIELD_MAPPINGS.users)
+      // gets that per-row value here instead of always the browsed org;
+      // modules with no such column never populate itemData.organization_id,
+      // so this falls back to the browsed org exactly as before for them.
       const wrappedCreateFunction = async (itemData) => {
         const data = {
           ...itemData,
-          associated_organization_id: organization_id,
-          organization_id: organization_id,
+          associated_organization_id:
+            itemData.organization_id || organization_id,
+          organization_id: itemData.organization_id || organization_id,
           ...additionalParams,
         };
         return await createFunction(data);
