@@ -19,9 +19,24 @@ import React, { useMemo, useState, useEffect } from "react";
 import { useAtomValue } from "jotai";
 import { userProfileAtom } from "@/store/userProfile";
 import { getPermissionConfig } from "./permissionConfig";
-import { Eye, Plus, Edit, Trash, Shield, Check, X } from "lucide-react";
+import {
+  Eye,
+  Plus,
+  Edit,
+  Trash,
+  Shield,
+  Check,
+  X,
+  ShieldAlert,
+} from "lucide-react";
 import { getReactSelectStyles } from "@/utils/selectTheme";
 import Select from "react-select";
+import EditModelBox from "@/components/common/EditModelBox";
+
+// Granting this lets the admin user create API keys with ANY permission
+// from the API key wizard's list — independent of what this admin user
+// itself holds. A mandatory confirmation is required before it is granted.
+const API_KEY_CREATE_PERMISSION = "api_keys:create";
 
 const ACTIONS = [
   { key: "view", label: "View", Icon: Eye },
@@ -72,6 +87,10 @@ const PermissionTables = ({
   const currentPermissions = watch("permissions") || [];
   const permissionConfig = useMemo(() => getPermissionConfig(), []);
   const [showTooltip, setShowTooltip] = useState(false);
+  const [apiKeyWarning, setApiKeyWarning] = useState({
+    open: false,
+    pendingPermissions: null,
+  });
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -90,6 +109,33 @@ const PermissionTables = ({
 
   const isPermissionGranted = (permission) =>
     currentPermissions.includes(permission);
+
+  // Every permission change funnels through here so the API-key-create
+  // warning can never be bypassed (single checkbox, column toggle, or
+  // section "Select all").
+  const commitPermissions = (newPermissions) => {
+    const grantsApiKeyCreate =
+      newPermissions.includes(API_KEY_CREATE_PERMISSION) &&
+      !currentPermissions.includes(API_KEY_CREATE_PERMISSION);
+
+    if (grantsApiKeyCreate) {
+      setApiKeyWarning({ open: true, pendingPermissions: newPermissions });
+      return;
+    }
+
+    setValue("permissions", newPermissions);
+  };
+
+  const confirmApiKeyWarning = () => {
+    if (apiKeyWarning.pendingPermissions) {
+      setValue("permissions", apiKeyWarning.pendingPermissions);
+    }
+    setApiKeyWarning({ open: false, pendingPermissions: null });
+  };
+
+  const cancelApiKeyWarning = () => {
+    setApiKeyWarning({ open: false, pendingPermissions: null });
+  };
 
   const togglePermission = (permission) => {
     const parts = permission.split(":");
@@ -117,7 +163,7 @@ const PermissionTables = ({
       }
       newPermissions.push(permission);
     }
-    setValue("permissions", newPermissions);
+    commitPermissions(newPermissions);
   };
 
   const toggleAll = (section, action = null) => {
@@ -168,7 +214,7 @@ const PermissionTables = ({
         });
       }
     }
-    setValue("permissions", newPermissions);
+    commitPermissions(newPermissions);
   };
 
   const getStats = (section) => {
@@ -356,6 +402,54 @@ const PermissionTables = ({
           )}
         </div>
       )}
+
+      {/* Mandatory confirmation before "Admin API Keys" -> Create can be granted */}
+      <EditModelBox
+        isOpen={apiKeyWarning.open}
+        label="Security Warning: API Key Creation"
+        showCancel={false}
+        outsideClick={false}
+        handleCancel={cancelApiKeyWarning}
+      >
+        <div className="w-md max-w-full text-left">
+          <div className="flex items-start gap-3">
+            <ShieldAlert className="text-warning h-8 w-8 flex-shrink-0" />
+            <div className="space-y-2 text-sm text-foreground">
+              <p>
+                This grants the user permission to{" "}
+                <strong>create API Keys</strong>.
+              </p>
+              <p>
+                API keys are assigned permissions independently of the admin
+                user creating them. Even if this admin user has{" "}
+                <strong>no other permissions</strong>, they can still create
+                an API key with additional permissions of their choosing —
+                such as access to organisations, identities, domains,
+                mailboxes or departments — and use that key to gain{" "}
+                <strong>unauthorized access</strong> to the system.
+              </p>
+              <p>Only grant this to administrators you fully trust.</p>
+            </div>
+          </div>
+
+          <div className="mt-5 flex items-center justify-end gap-3">
+            <button
+              type="button"
+              className="rounded-lg border p-2 text-sm font-medium"
+              onClick={cancelApiKeyWarning}
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              className="border-warning text-warning rounded-lg border p-2 text-sm font-medium"
+              onClick={confirmApiKeyWarning}
+            >
+              I Understand, Grant Permission
+            </button>
+          </div>
+        </div>
+      </EditModelBox>
     </div>
   );
 };

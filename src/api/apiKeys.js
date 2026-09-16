@@ -122,7 +122,7 @@ export const createApiKey = async (organization_id, data) => {
       method,
       action_type: "create_api_key",
       payload: { organization_id, ...data },
-      message: `New API Key created successfully - Name: "${data.name || "Untitled"}"`,
+      message: `New API Key created successfully - Name: "${data.key_name || "Untitled"}"`,
       org_Id: organization_id,
     });
 
@@ -131,7 +131,7 @@ export const createApiKey = async (organization_id, data) => {
     const response = error?.response || {};
     AuthAPI({ status: response?.status });
 
-    const keyName = data?.name || "Unknown name";
+    const keyName = data?.key_name || "Unknown name";
     await addLogs({
       values: response,
       type: "error",
@@ -175,7 +175,7 @@ export const editApiKey = async (
       method,
       action_type: "edit_api_key",
       payload: { organization_id, api_key_id, activate, ...data },
-      message: `API Key updated successfully - ID: ${api_key_id}`,
+      message: `API Key "${data?.key_name || "Untitled"}" updated successfully - ID: ${api_key_id}`,
       org_Id: organization_id,
     });
 
@@ -190,7 +190,7 @@ export const editApiKey = async (
       method,
       action_type: "edit_api_key",
       payload: { organization_id, api_key_id, activate, ...data },
-      message: `Failed to update API Key ID: ${api_key_id}`,
+      message: `Failed to update API Key "${data?.key_name || "Unknown name"}" - ID: ${api_key_id}`,
       org_Id: organization_id,
     });
 

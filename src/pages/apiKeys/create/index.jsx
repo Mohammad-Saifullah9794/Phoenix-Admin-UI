@@ -214,6 +214,7 @@ const CreateApiKeys = () => {
     <>
       <FormProvider {...methods}>
         <FormLayout
+          docId="apikey/create"
           steps={steps}
           currentStep={currentStep}
           completedSteps={completedSteps}

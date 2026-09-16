@@ -479,13 +479,13 @@ export const navItems = [
         permissionValue: "user:security:permissions:template:view",
       },
       // Disabled for v2
-      // {
-      //   name: "API Keys",
-      //   icon: <Key size={16} />,
-      //   link: "/keys",
-      //   hasPermission: true,
-      //   permissionValue: "api_keys:view",
-      // },
+      {
+        name: "API Keys",
+        icon: <Key size={16} />,
+        link: "/keys",
+        hasPermission: true,
+        permissionValue: "api_keys:view",
+      },
     ],
   },
   {

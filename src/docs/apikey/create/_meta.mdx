@@ -1,0 +1,27 @@
+---
+title: Create an API key
+feature: apikey
+flow: create
+summary: Generate a scoped API key for programmatic access, and choose exactly what it can reach.
+updated: 2026-09-16
+---
+
+# Create an API key
+
+An API key lets an external service or script call this panel's API without a
+personal login. Like an admin user, a key only has access to what its
+permissions grant — nothing more. The wizard has three steps:
+
+1. **General Information** — a name, an optional description, and any custom
+   metadata tags.
+2. **Permissions** — exactly which resources this key can view, create, edit
+   or delete.
+3. **Preview** — check everything, then create.
+
+<Callout type="warning" title="The key secret is shown only once">
+  After you create the key, its secret value is displayed one time in a
+  confirmation dialog. Copy or download it immediately — it cannot be
+  retrieved again afterwards, only regenerated as a new key.
+</Callout>
+
+Open the **Guide** panel on any step to see help for just that step.

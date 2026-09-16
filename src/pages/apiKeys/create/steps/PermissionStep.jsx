@@ -22,6 +22,27 @@ import { Eye, Plus, Edit, Trash, Check, X, Shield } from "lucide-react";
 
 const API_KEY_PERMISSIONS_CONFIG = [
   {
+    category: "administration",
+    categoryLabel: "Administration",
+    modules: [
+      {
+        label: "Organization",
+        permissions: {
+          view: "organization:view",
+        },
+      },
+      {
+        label: "Identity Management",
+        permissions: {
+          view: "identity:view",
+          create: "identity:create",
+          edit: "identity:edit",
+          delete: "identity:delete",
+        },
+      },
+    ],
+  },
+  {
     category: "mail_flow",
     categoryLabel: "Mail Flow",
     modules: [
@@ -46,66 +67,6 @@ const API_KEY_PERMISSIONS_CONFIG = [
     ],
   },
   {
-    category: "policies",
-    categoryLabel: "Policies",
-    modules: [
-      {
-        label: "General Policy",
-        permissions: {
-          view: "policy:general:view",
-          create: "policy:general:create",
-          edit: "policy:general:edit",
-          delete: "policy:general:delete",
-        },
-      },
-      {
-        label: "Filters Policy",
-        permissions: {
-          view: "policy:filters:view",
-          create: "policy:filters:create",
-          edit: "policy:filters:edit",
-          delete: "policy:filters:delete",
-        },
-      },
-      {
-        label: "Attachment Policy",
-        permissions: {
-          view: "policy:attachment:view",
-          create: "policy:attachment:create",
-          edit: "policy:attachment:edit",
-          delete: "policy:attachment:delete",
-        },
-      },
-      {
-        label: "Restriction Policy",
-        permissions: {
-          view: "policy:restriction:view",
-          create: "policy:restriction:create",
-          edit: "policy:restriction:edit",
-          delete: "policy:restriction:delete",
-        },
-      },
-      {
-        label: "Forwarding Policy",
-        permissions: {
-          view: "policy:forwarding:view",
-          create: "policy:forwarding:create",
-          edit: "policy:forwarding:edit",
-          delete: "policy:forwarding:delete",
-        },
-      },
-      {
-        label: "Distribution Policy",
-        permissions: {
-          view: "policy:distribution:view",
-          create: "policy:distribution:create",
-          edit: "policy:distribution:edit",
-          delete: "policy:distribution:delete",
-        },
-      },
-    ],
-  },
-  {
     category: "mail_management",
     categoryLabel: "Mail Management",
     modules: [
@@ -116,24 +77,6 @@ const API_KEY_PERMISSIONS_CONFIG = [
           create: "department:create",
           edit: "department:edit",
           delete: "department:delete",
-        },
-      },
-      {
-        label: "Disclaimer",
-        permissions: {
-          view: "disclaimer:view",
-          create: "disclaimer:create",
-          edit: "disclaimer:edit",
-          delete: "disclaimer:delete",
-        },
-      },
-      {
-        label: "Caution",
-        permissions: {
-          view: "caution:view",
-          create: "caution:create",
-          edit: "caution:edit",
-          delete: "caution:delete",
         },
       },
     ],

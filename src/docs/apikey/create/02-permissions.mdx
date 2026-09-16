@@ -1,0 +1,42 @@
+---
+title: Permissions
+feature: apikey
+flow: create
+step: 2
+summary: The permission matrix that decides exactly what this API key can reach.
+updated: 2026-09-16
+---
+
+## Permissions
+
+This step decides exactly what the key can do. Permissions are grouped into
+categories, and each item within a category can have up to four actions.
+
+### View, create, edit, delete
+
+- **View** — can read this resource through the API.
+- **Create** — can add a new one.
+- **Edit** — can change an existing one.
+- **Delete** — can remove one.
+
+Tick the boxes you want to grant. A dash (`—`) means that action does not
+apply to that item — the **Organization** module, for example, only supports
+**View**. Each category shows a running count (e.g. `3/4`) of how many boxes
+are ticked out of the total available, and has its own **Select All** button
+to grant (or clear) every action in that category at once. A column header
+(the **View**, **Create**, **Edit** or **Delete** icon) toggles that single
+action across every module in the category.
+
+### The categories
+
+- **Administration** — **Organization** (view only) and **Identity
+  Management** (view, create, edit, delete).
+- **Mail Flow** — **Domains** and **MailBox** (view, create, edit, delete).
+- **Mail Management** — **Departments** (view, create, edit, delete).
+
+<Callout type="info" title="Only what the integration needs">
+  Grant the smallest set of permissions the calling service actually
+  requires. A read-only integration should only receive **View** — leaving
+  **Create**, **Edit** and **Delete** unticked limits the damage if the key is
+  ever leaked.
+</Callout>

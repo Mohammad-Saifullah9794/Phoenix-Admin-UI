@@ -551,30 +551,30 @@ const Router = [
           },
 
           //api keys - disabled for v2
-          // {
-          //   path: "/keys",
-          //   element: (
-          //     <LazyWrapper>
-          //       <ListApiKeys />
-          //     </LazyWrapper>
-          //   ),
-          // },
-          // {
-          //   path: "/keys/create",
-          //   element: (
-          //     <LazyWrapper>
-          //       <CreateApiKeys />
-          //     </LazyWrapper>
-          //   ),
-          // },
-          // {
-          //   path: "/keys/edit/:api_key_id",
-          //   element: (
-          //     <LazyWrapper>
-          //       <EditApiKeys />
-          //     </LazyWrapper>
-          //   ),
-          // },
+          {
+            path: "/keys",
+            element: (
+              <LazyWrapper>
+                <ListApiKeys />
+              </LazyWrapper>
+            ),
+          },
+          {
+            path: "/keys/create",
+            element: (
+              <LazyWrapper>
+                <CreateApiKeys />
+              </LazyWrapper>
+            ),
+          },
+          {
+            path: "/keys/edit/:api_key_id",
+            element: (
+              <LazyWrapper>
+                <EditApiKeys />
+              </LazyWrapper>
+            ),
+          },
 
           // User routes
           {
