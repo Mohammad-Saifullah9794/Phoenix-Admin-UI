@@ -111,25 +111,20 @@ const ListUsers = () => {
     handleImportComplete,
     isImportAvailable,
   } = useBulkImport("users", async (userData) => {
-    // Matches the exact payload built by the single Add User flow
-    // (userManagement/add/index.jsx onSubmit). "Permission Template" is an
-    // optional column naming one of this org's configured templates
-    // (userProfileAtom.permissions_template, the same dict the "Load
-    // Permission Template" dropdown on the manual Add User/Change
-    // Permissions forms reads from) - matched case-insensitively since it's
-    // hand-typed in a spreadsheet. Left blank, the row gets no permissions,
-    // same as skipping the Permissions step manually; access can be granted
-    // afterwards via the per-row "Change Permissions" action.
+   
     const templateName = String(userData.permission_template || "").trim();
     let resolvedPermissions = [];
     let resolvedPermissionsTemplate = {};
 
     if (templateName) {
       const matchedKey = Object.keys(UserTemplate || {}).find(
-        (key) => key.toLowerCase() === templateName.toLowerCase(),
+        (key) => key.trim().toLowerCase() === templateName.toLowerCase(),
       );
       if (!matchedKey) {
-        const available = Object.keys(UserTemplate || {}).join(", ") || "none";
+        const available =
+          Object.keys(UserTemplate || {})
+            .map((key) => `"${key}"`)
+            .join(", ") || "none";
         throw new Error(
           `Permission Template "${templateName}" not found. Available templates: ${available}`,
         );
