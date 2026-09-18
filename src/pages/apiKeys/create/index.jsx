@@ -23,6 +23,7 @@ import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 
 import { useCreateApiKey } from "@/hooks/useApiKeys";
+import { useGetOrganizationDetail } from "@/hooks/useOrganization";
 import { apiKeyDefaultValues } from "./defaultValues";
 import { apiKeyValidationSchema } from "./validationSchema";
 import BasicInfoStep from "./steps/BasicInfoStep";
@@ -51,6 +52,8 @@ const CreateApiKeys = () => {
   const { organization_id } = useAtomValue(userInfoAtom);
   const profile = useAtomValue(userProfileAtom);
   const { permissions = [] } = useAtomValue(userProfileAtom) || {};
+  const { data: organizationDetails } =
+    useGetOrganizationDetail(organization_id);
 
   // API Hook
   const { mutate: createApiKey, isPending } = useCreateApiKey();
@@ -193,6 +196,8 @@ const CreateApiKeys = () => {
             details: detailsObject,
             key_name: data.key_name,
             permissions: data.permissions,
+            organization_id,
+            organization_name: organizationDetails?.organization_name,
           });
           setShowSuccessModal(true);
         },

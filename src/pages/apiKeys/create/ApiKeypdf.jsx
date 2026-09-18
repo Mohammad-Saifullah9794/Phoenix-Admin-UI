@@ -17,6 +17,7 @@
 
 import React from "react";
 import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
+import { API_URL } from "@/constants/constants";
 
 const styles = StyleSheet.create({
   page: {
@@ -139,6 +140,12 @@ const ApiKeyPDF = ({ data }) => {
           <Text style={styles.keyValue}>{data?.api_key || "N/A"}</Text>
         </View>
 
+        {/* Base URL Section */}
+        <View style={styles.keyContainer}>
+          <Text style={styles.keyLabel}>API Base URL</Text>
+          <Text style={styles.keyValue}>{API_URL.replace(/\/+$/, "")}</Text>
+        </View>
+
         {/* Details Section */}
         <View style={styles.section}>
           <Text style={styles.label}>Key Name</Text>
@@ -152,6 +159,17 @@ const ApiKeyPDF = ({ data }) => {
 
           <Text style={styles.label}>Generated On</Text>
           <Text style={styles.value}>{createdDate}</Text>
+        </View>
+
+        {/* Organization Section */}
+        <View style={styles.section}>
+          <Text style={styles.label}>Organization</Text>
+          <Text style={styles.value}>
+            {data?.organization_name || "-"}
+          </Text>
+
+          <Text style={styles.label}>Organization ID</Text>
+          <Text style={styles.value}>{data?.organization_id || "-"}</Text>
         </View>
 
         {/* Custom Metadata Section */}

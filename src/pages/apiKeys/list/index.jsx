@@ -36,9 +36,10 @@ import { useQueryClient } from "@tanstack/react-query";
 import { selectedOrganizationAtom, userInfoAtom } from "@/store/userInfo";
 import NoDataFound from "@/components/common/NoDataFound";
 import { useBulkSelection } from "@/hooks/useBulkSelection";
-import { Trash2, Plus, Edit, Eye, Key } from "lucide-react";
+import { Trash2, Plus, Edit, Eye, Key, BookOpen, Copy } from "lucide-react";
 import DropdownButton from "@/components/common/DropdownButton";
-import { PER_PAGE } from "@/constants/constants";
+import { Button } from "@/components/common/Buttons";
+import { API_URL, PER_PAGE, V3_API_DOCS_URL } from "@/constants/constants";
 import DataErrorWithReload from "@/components/common/DataErrorWithReload";
 import { useUserTimezone } from "@/hooks/useTimezone";
 import TableActionsDropdown from "@/components/common/TableActionDropdown";
@@ -71,6 +72,17 @@ const ListApiKeys = () => {
   const toast = useToastify();
   const { formatUserDateNice } = useUserTimezone();
   const queryClient = useQueryClient();
+
+  // Base URL API keys authenticate against
+  const apiBaseUrl = API_URL.replace(/\/+$/, "");
+  const handleCopyBaseUrl = async () => {
+    try {
+      await navigator.clipboard.writeText(apiBaseUrl);
+      toast("success", "Base URL copied to clipboard");
+    } catch {
+      toast("error", "Failed to copy Base URL");
+    }
+  };
 
   // API Hooks
   const { mutate, isPending } = useDeleteApiKey();
@@ -330,10 +342,39 @@ const ListApiKeys = () => {
       <div className="h-full w-full px-2">
         {/* Header */}
         <div className="mb-2.5 flex w-full items-center justify-between gap-6">
-          <Breadcrumbs items={[{ name: "Settings" }, { name: "API Keys" }]} />
+          <div className="flex flex-col gap-1">
+            <Breadcrumbs items={[{ name: "Settings" }, { name: "API Keys" }]} />
+            <div className="flex items-center gap-1.5">
+              <span className="text-muted-foreground text-xs font-medium uppercase tracking-wide">
+                Base URL:
+              </span>
+              <code className="text-foreground bg-muted/50 border-border rounded border px-1.5 py-0.5 font-mono text-xs">
+                {apiBaseUrl}
+              </code>
+              <button
+                type="button"
+                onClick={handleCopyBaseUrl}
+                title="Copy Base URL"
+                className="text-muted-foreground hover:text-primary rounded p-1 transition-colors"
+              >
+                <Copy className="h-3 w-3" />
+              </button>
+            </div>
+          </div>
 
           <div className="flex items-center justify-end gap-3">
             {/* Bulk Actions */}
+
+            {/* API Docs Link */}
+            <Button
+              variant="outline"
+              icon={BookOpen}
+              onClick={() =>
+                window.open(V3_API_DOCS_URL, "_blank", "noopener,noreferrer")
+              }
+            >
+              View API Docs
+            </Button>
 
             {/* Create Action */}
             {createOptions.length > 0 && (

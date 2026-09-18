@@ -33,7 +33,9 @@ import {
   Check,
   Eye,
   EyeOff,
+  BookOpen,
 } from "lucide-react";
+import { API_URL, V3_API_DOCS_URL } from "@/constants/constants";
 
 const ViewApiKeyModal = ({ isOpen, onClose, key_id, organizationId }) => {
   const { t } = useTranslation();
@@ -41,6 +43,7 @@ const ViewApiKeyModal = ({ isOpen, onClose, key_id, organizationId }) => {
   const { data: apiKey, isLoading } = useApiKeyDetails(organizationId, key_id);
   const [showKey, setShowKey] = React.useState(true);
   const [copied, setCopied] = React.useState(false);
+  const apiBaseUrl = API_URL.replace(/\/+$/, "");
 
   const handleCopy = (text) => {
     if (text) {
@@ -71,6 +74,19 @@ const ViewApiKeyModal = ({ isOpen, onClose, key_id, organizationId }) => {
         </div>
       ) : apiKey ? (
         <div className="w-full text-left">
+          {/* API Docs Link */}
+          <div className="mb-3 flex justify-end">
+            <a
+              href={V3_API_DOCS_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+            >
+              <BookOpen size={14} />
+              {t("View API Docs")}
+            </a>
+          </div>
+
           {/* Header Section: Key Name & Value */}
           <div className="mt-2 mb-4 rounded-xl border border-primary/20 bg-gradient-to-r from-primary/5 to-primary/10 p-4">
             <div className="flex flex-col gap-3">
@@ -124,6 +140,32 @@ const ViewApiKeyModal = ({ isOpen, onClose, key_id, organizationId }) => {
                     )}
                   </div>
                 </div> */}
+              </div>
+
+              {/* API Base URL */}
+              <div className="relative flex items-center justify-between rounded-md border border-border bg-background/50 px-3 py-2">
+                <div className="flex flex-col flex-1 min-w-0">
+                  <span className="text-[10px] uppercase text-muted-foreground font-semibold">
+                    {t("API Base URL")}
+                  </span>
+                  <code className="text-sm font-mono text-foreground truncate">
+                    {apiBaseUrl}
+                  </code>
+                </div>
+                <div className="relative flex items-center gap-1 ml-2">
+                  <button
+                    onClick={() => handleCopy(apiBaseUrl)}
+                    className="rounded p-1.5 text-muted-foreground hover:bg-primary/10 hover:text-primary transition-colors"
+                    title={t("Copy Base URL")}
+                  >
+                    <Copy size={14} />
+                  </button>
+                  {copied && (
+                    <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-foreground text-background text-[10px] px-2 py-1 rounded whitespace-nowrap shadow-lg animate-in fade-in slide-in-from-bottom-1">
+                      {t("Copied!")}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>

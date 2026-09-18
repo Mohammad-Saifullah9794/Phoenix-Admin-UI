@@ -222,11 +222,9 @@ const EditApiKeys = () => {
       {
         onSuccess: () => {
           navigate("/keys");
-          toast.success(t("API Key updated successfully"));
         },
         onError: (err) => {
           console.error("Failed to update API Key", err);
-          toast.error(t("Failed to update API Key"));
         },
       },
     );

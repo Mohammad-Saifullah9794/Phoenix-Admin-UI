@@ -25,22 +25,36 @@ import {
   EyeOff,
   Copy,
   X,
+  BookOpen,
 } from "lucide-react";
 import ApiKeyPDF from "./ApiKeypdf";
+import { API_URL, V3_API_DOCS_URL } from "@/constants/constants";
 
 const ApiKeySuccessModal = ({ isOpen, onClose, data }) => {
   const [isKeyVisible, setIsKeyVisible] = useState(false);
   const [copySuccess, setCopySuccess] = useState(false);
+  const [copyUrlSuccess, setCopyUrlSuccess] = useState(false);
 
   if (!isOpen || !data) return null;
 
   const apiKeySecret = data.api_key || "";
+  const apiBaseUrl = API_URL.replace(/\/+$/, "");
 
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(apiKeySecret);
       setCopySuccess(true);
       setTimeout(() => setCopySuccess(false), 2000);
+    } catch (err) {
+      console.error("Failed to copy:", err);
+    }
+  };
+
+  const handleCopyUrl = async () => {
+    try {
+      await navigator.clipboard.writeText(apiBaseUrl);
+      setCopyUrlSuccess(true);
+      setTimeout(() => setCopyUrlSuccess(false), 2000);
     } catch (err) {
       console.error("Failed to copy:", err);
     }
@@ -63,6 +77,15 @@ const ApiKeySuccessModal = ({ isOpen, onClose, data }) => {
           <h2 className="text-xl font-semibold text-foreground">
             API Key Created Successfully
           </h2>
+          <a
+            href={V3_API_DOCS_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+          >
+            <BookOpen size={16} />
+            View API Docs
+          </a>
         </div>
 
         {/* Content */}
@@ -115,6 +138,32 @@ const ApiKeySuccessModal = ({ isOpen, onClose, data }) => {
                   {copySuccess ? <CheckCircle size={18} /> : <Copy size={18} />}
                 </button>
               </div>
+
+              <label className="text-muted-foreground text-xs font-semibold tracking-wide uppercase">
+                API Base URL
+              </label>
+              <div className="flex items-center gap-2">
+                <div className="flex-1 p-3 bg-background border-border rounded-lg border">
+                  <code className="font-mono text-sm break-all text-foreground">
+                    {apiBaseUrl}
+                  </code>
+                </div>
+                <button
+                  onClick={handleCopyUrl}
+                  className="p-3 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg transition-colors"
+                  title="Copy to clipboard"
+                >
+                  {copyUrlSuccess ? (
+                    <CheckCircle size={18} />
+                  ) : (
+                    <Copy size={18} />
+                  )}
+                </button>
+              </div>
+              <p className="text-muted-foreground text-xs">
+                Send this key as the <code>Authorization</code> header when
+                calling the base URL above.
+              </p>
             </div>
           </div>
 
@@ -134,6 +183,22 @@ const ApiKeySuccessModal = ({ isOpen, onClose, data }) => {
               </p>
               <p className="text-foreground text-base font-semibold">
                 {data?.created_by || "N/A"}
+              </p>
+            </div>
+            <div className="border-border rounded-lg border p-4 bg-card">
+              <p className="text-muted-foreground mb-2 text-xs tracking-wide uppercase">
+                Organization
+              </p>
+              <p className="text-foreground text-base font-semibold">
+                {data?.organization_name || "N/A"}
+              </p>
+            </div>
+            <div className="border-border rounded-lg border p-4 bg-card">
+              <p className="text-muted-foreground mb-2 text-xs tracking-wide uppercase">
+                Organization ID
+              </p>
+              <p className="text-foreground text-base font-semibold break-all">
+                {data?.organization_id || "N/A"}
               </p>
             </div>
           </div>

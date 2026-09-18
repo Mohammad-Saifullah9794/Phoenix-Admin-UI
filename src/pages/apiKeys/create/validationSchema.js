@@ -40,5 +40,6 @@ export const apiKeyValidationSchema = Yup.object().shape({
 
   permissions: Yup.array()
     .of(Yup.string().max(100, "Permission must not exceed 100 characters"))
-    .optional(),
+    .min(1, "Select at least one permission")
+    .required("Select at least one permission"),
 });

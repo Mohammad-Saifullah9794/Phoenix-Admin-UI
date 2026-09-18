@@ -41,6 +41,13 @@ export const BUILD_INFO = {
 
 export const BASE_ORG = getEnv("VITE_BASE_ORG", "YSPL");
 
+// Public reference docs for the V3 REST API that admin API keys authenticate
+// against (distinct from this panel's own in-app help under src/docs).
+export const V3_API_DOCS_URL = getEnv(
+  "VITE_V3_API_DOCS_URL",
+  "https://v3-api.docs.yukthi.net/docs/intro",
+);
+
 export const DNS_API_KEY = getEnv("VITE_DNS_API_KEY", "");
 
 // Observability (OpenObserve RUM/logs)
